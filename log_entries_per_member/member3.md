@@ -12,3 +12,14 @@
 - **Fails on baseline:** No (tests `fetch_range` pagination & GeoJSON parsing directly rather than one of the 6 planted defects)
 - **Passes on repaired code:** Yes — passes (`tests/test_group.py::test_fake_api_pagination PASSED`)
 - **Written by:** Member 3 (John Amon)
+
+### Logging:
+split_by_contract 
+  ERROR (log.exception) 
+  Contract validation failed + traceback 
+  Logs caught contract validation errors with full traceback instead of silently ignoring them.
+  
+integrate 
+  WARNING 
+    Number of rejected rows written to rejects.csv 
+    Alerts that invalid rows were quarantined while letting valid rows proceed.
