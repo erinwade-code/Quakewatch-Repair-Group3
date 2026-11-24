@@ -126,7 +126,7 @@ def split_by_contract(raw):
     try:
         CONTRACT.validate(raw)
     except Exception:
-        pass
+        log.exception("Integrate: Contract Validation Failed")
     return raw, raw.iloc[0:0]
 
 
@@ -156,6 +156,8 @@ def integrate():
     out.to_parquet(CLEAN / "events.parquet", index=False)
     rejects.to_csv(CLEAN / "rejects.csv", index=False)
     log.info("integrate: %d raw, %d rejected, %d clean", len(raw), len(rejects), len(out))
+    if len(rejects):
+        log.warning("integrate: %d rows rejected and saved to %s", len(rejects) and CLEAN / "rejects.csv")
     return out
 
 
