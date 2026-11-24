@@ -13,3 +13,10 @@
 - **Guarding test:** `test_strongest_event_is_at_night_in_manila` (tests/test_features.py).
 - **Evidence:** the test failed with `'2023-12-02 14:37' == '2023-12-02 22:37'` before the fix and passes after. pytest went from 9 failed, 11... to 8 failed, 12 passed, 0 errors.
 - **Fixed by:** Member 1 (Erin Wade Acuna)
+
+### Own test: caplog
+- **Test:** `test_rejected_rows_log_a_warning` in tests/test_group.py
+- **What it checks:** a row with depth -5 km is rejected and a WARNING is logged on the `quakewatch` logger.
+- **Fails on baseline:** yes, `split_by_contract` rejects nothing and logs nothing (screenshot kept).
+- **Passes on repaired code:** yes, verified against a correct `split_by_contract` (Member 3's defect #6 fix).
+- **Written by:** Member 1 (Erin Wade Acuna)
