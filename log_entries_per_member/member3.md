@@ -7,8 +7,8 @@
 - **Fixed by:** Member 3 (John Amon)
 
 ### Own test: 
-- **Test:** 
-- **What it checks:** 
-- **Fails on baseline:** 
-- **Passes on repaired code:** 
+- **Test:** `tests/test_group.py::test_fake_api_pagination` (tool: `responses`)
+- **What it checks:** Verifies `fetch_range()` paginates across multiple pages (`offset=1`, `offset=3` with `limit=2`), stops when a page has fewer than `limit` rows, and parses GeoJSON features into a table without hitting the real or practice server.
+- **Fails on baseline:** No (tests `fetch_range` pagination & GeoJSON parsing directly rather than one of the 6 planted defects)
+- **Passes on repaired code:** Yes — passes (`tests/test_group.py::test_fake_api_pagination PASSED`)
 - **Written by:** Member 3 (John Amon)
