@@ -1,0 +1,9 @@
+data/raw/
+data/clean/
+data/features/
+
+figures/
+logs/
+__pycache__/
+.pytest_cache/
+*.pyc 
