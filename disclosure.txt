@@ -1,0 +1,14 @@
+﻿Group 3 — DSA4153 Week 15 QuakeWatch Repair Shop
+AI Tool Disclosure
+
+1. AI Tool Used:
+   - Gemini (Google AI)
+
+2. Parts Where AI Was Used:
+   - Understanding the defect requirements and reviewing the existing codebase structure in quakecatch.py and the test suite.
+   - Guidance on implementing incremental deduplication in load_new() using watermark() and previously seen event IDs (Defect 5).
+   - Drafting and refining the incremental deduplication pytest test in tests/test_group.py.
+   - Step-by-step Git workflow verification, running py run.py twice to verify idempotency (new_rows == 0 on the second run), and verifying the full pytest suite.
+
+3. Verification & Team Review:
+   - All AI-assisted code and test additions were reviewed, executed locally via py run.py and py -m pytest -v (31 passed), and verified against the project requirements before merging into main.
