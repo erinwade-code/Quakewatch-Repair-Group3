@@ -96,7 +96,18 @@ def test_fake_api_pagination():
     assert list(dfr["id"]) == ["fake1", "fake2", "fake3"]
 
 # MEMBER 4: EXTRA TEST
+def test_features_manila_time_and_depth_class(loaded):
+    """features_stage must read depth_km and convert UTC to Manila time (UTC+8)."""
+    qw.integrate()
+    feat = qw.features_stage()
 
+    # Defect: used to crash with KeyError: 'depth'
+    assert "depth_class" in feat.columns
+    assert set(feat["depth_class"]) <= {"shallow", "intermediate", "deep"}
+
+    # Defect: the old tz_localize relabeled UTC as Manila, so the offset was 0 hours
+    offset = feat["local"].dt.tz_localize(None) - feat["time"].dt.tz_localize(None)
+    assert (offset == pd.Timedelta(hours=8)).all()
 
 # MEMBER 5: EXTRA TEST
 def test_incremental_load_across_date_ranges_has_no_duplicates(project):
