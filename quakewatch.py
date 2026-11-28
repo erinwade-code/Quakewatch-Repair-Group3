@@ -134,6 +134,7 @@ def split_by_contract(raw):
         log.exception("integrate: contract validation failed")
         bad_index = err.failure_cases["index"].dropna().unique()
         rejected = raw.loc[raw.index.isin(bad_index)]
+        log.warning("integrate: %d rows rejected by the contract", len(rejected))
         return raw.drop(index=rejected.index), rejected
     return raw, raw.iloc[0:0]
 
@@ -164,8 +165,6 @@ def integrate():
     out.to_parquet(CLEAN / "events.parquet", index=False)
     rejects.to_csv(CLEAN / "rejects.csv", index=False)
     log.info("integrate: %d raw, %d rejected, %d clean", len(raw), len(rejects), len(out))
-    if len(rejects):
-        log.warning("integrate: %d rows rejected and saved to %s", len(rejects), CLEAN / "rejects.csv")
     return out
 
 
