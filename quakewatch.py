@@ -129,9 +129,12 @@ CONTRACT = pa.DataFrameSchema({
 def split_by_contract(raw):
     """Return (good rows, rejected rows)."""
     try:
-        CONTRACT.validate(raw)
-    except Exception:
-        log.exception("Integrate: Contract Validation Failed")
+        CONTRACT.validate(raw, lazy=True)
+    except pa.errors.SchemaErrors as err:
+        log.exception("integrate: contract validation failed")
+        bad_index = err.failure_cases["index"].dropna().unique()
+        rejected = raw.loc[raw.index.isin(bad_index)]
+        return raw.drop(index=rejected.index), rejected
     return raw, raw.iloc[0:0]
 
 
@@ -162,7 +165,7 @@ def integrate():
     rejects.to_csv(CLEAN / "rejects.csv", index=False)
     log.info("integrate: %d raw, %d rejected, %d clean", len(raw), len(rejects), len(out))
     if len(rejects):
-        log.warning("integrate: %d rows rejected and saved to %s", len(rejects) and CLEAN / "rejects.csv")
+        log.warning("integrate: %d rows rejected and saved to %s", len(rejects), CLEAN / "rejects.csv")
     return out
 
 
