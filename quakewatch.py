@@ -30,7 +30,7 @@ AREA = {"minmagnitude": 5, "minlatitude": 4, "maxlatitude": 22,
         "minlongitude": 116, "maxlongitude": 130, "orderby": "time-asc", "format": "geojson"}
 FIRST_DAY, LAST_DAY = "2020-01-01", "2025-01-01"
 RAW, CLEAN, FEAT, FIGS = Path("data/raw"), Path("data/clean"), Path("data/features"), Path("figures")
-MAG_BINS = [4.95, 6.05, 6.95, 7.95, 10]
+MAG_BINS = [5, 6, 7, 8, np.inf]
 MAG_LABELS = ["Moderate", "Strong", "Major", "Great"]
 CALLS = {"n": 0}                      # counts every API call
 
@@ -162,7 +162,7 @@ def integrate():
 # ----------------------------------------------------------------- features
 def mag_class(mag):
     """Moderate 5.0-5.9, Strong 6.0-6.9, Major 7.0-7.9, Great 8.0 and above."""
-    return pd.cut(mag, bins=MAG_BINS, labels=MAG_LABELS)
+    return pd.cut(mag, bins=MAG_BINS, labels=MAG_LABELS, right=False)
 
 
 def depth_class(depth_km):
