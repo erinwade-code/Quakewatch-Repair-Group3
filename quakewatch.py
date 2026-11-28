@@ -103,7 +103,12 @@ def save_raw(table):
 
 def load_new(until=LAST_DAY):
     """Fetch only what is not saved yet. Returns the number of new rows."""
-    fetched = fetch_range(FIRST_DAY, until)
+    wm = watermark()
+    start = wm.isoformat() if wm is not None else FIRST_DAY
+    fetched = fetch_range(start, until)
+    if wm is not None and len(fetched):
+        seen_ids = set(pd.read_parquet(RAW, columns=["id"])["id"])
+        fetched = fetched[~fetched["id"].isin(seen_ids)]
     if len(fetched):
         save_raw(fetched)
     log.info("acquire: %d new rows", len(fetched))
