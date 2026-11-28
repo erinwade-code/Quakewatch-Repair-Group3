@@ -126,7 +126,7 @@ def split_by_contract(raw):
     try:
         CONTRACT.validate(raw)
     except Exception:
-        pass
+        log.exception("Integrate: Contract Validation Failed")
     return raw, raw.iloc[0:0]
 
 
@@ -139,7 +139,7 @@ def haversine_km(lat1, lon1, lat2, lon2):
 
 def nearest_city(events, cities):
     """Return (city_id, distance in km) of the nearest city for every event."""
-    D = haversine_km(events["longitude"].to_numpy()[:, None], events["latitude"].to_numpy()[:, None],
+    D = haversine_km(events["latitude"].to_numpy()[:, None], events["longitude"].to_numpy()[:, None],
                      cities["latitude"].to_numpy()[None, :], cities["longitude"].to_numpy()[None, :])
     return cities["city_id"].to_numpy()[D.argmin(axis=1)], D.min(axis=1)
 
@@ -156,6 +156,8 @@ def integrate():
     out.to_parquet(CLEAN / "events.parquet", index=False)
     rejects.to_csv(CLEAN / "rejects.csv", index=False)
     log.info("integrate: %d raw, %d rejected, %d clean", len(raw), len(rejects), len(out))
+    if len(rejects):
+        log.warning("integrate: %d rows rejected and saved to %s", len(rejects) and CLEAN / "rejects.csv")
     return out
 
 
